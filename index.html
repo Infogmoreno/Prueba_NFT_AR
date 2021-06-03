@@ -1,32 +1,5 @@
 <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
-
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-<script>
-  window.onload = function() {
-    AFRAME.registerComponent("videohandler", {
-      init: function() {
-        var marker = this.el;
-
-        this.vid = document.querySelector("#vid");
-
-        marker.addEventListener(
-          "markerFound",
-          function() {
-            this.vid.play();
-          }.bind(this)
-        );
-
-        marker.addEventListener(
-          "markerLost",
-          function() {
-            this.vid.pause();
-            this.vid.currentTime = 0;
-          }.bind(this)
-        );
-      }
-    });
-  };
-</script>
 
 <style>
   .arjs-loader {
@@ -50,43 +23,32 @@
 </style>
 
 <body style="margin : 0px; overflow: hidden;">
+  <!-- minimal loader shown until image descriptors are loaded -->
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
   </div>
   <a-scene
     vr-mode-ui="enabled: false;"
-    renderer="antialias: true; alpha: true; precision: mediump;"
+    renderer="logarithmicDepthBuffer: true;"
     embedded
-    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
   >
-    <a-assets>
-      <video
-        src="https://cdn.glitch.com/930c542d-2a60-4093-a74f-2dd0d98051fa%2FVasija_LuxRender.mp4?v=1622723148794"
-        preload="auto"
-        id="vid"
-        response-type="arraybuffer"
-        loop
-        crossorigin
-        webkit-playsinline
-        autoplay
-        muted
-        playsinline
-      ></video>
-    </a-assets>
-
+    <!-- we use cors proxy to avoid cross-origin problems -->
     <a-nft
-      videohandler
       type="nft"
-      url="https://arjs-cors-proxy.herokuapp.com/https://rawcdn.githack.com/Infogmoreno/ARMarkers/7a11a3b7a02b1a839a54a0603580af5fb572a77b/06_les_amoureux_marker.fset"
+      url="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
       smooth="true"
-      smoothount="10"
-      smoothtolerance="0.01"
-      smooththreshold="5"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
     >
-      <a-video src="#vid" rotation="-90 0 0" position="50 150 -100" width="300" height="175">
-      </a-video>
+      <a-entity
+        gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
+        scale="5 5 5"
+        position="50 150 0"
+      >
+      </a-entity>
     </a-nft>
     <a-entity camera></a-entity>
   </a-scene>
 </body>
-
